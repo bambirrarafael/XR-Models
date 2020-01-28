@@ -1,3 +1,3 @@
 # XR-Models
 
-Discrete decision making model
+Discrete decision making models

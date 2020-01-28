@@ -67,7 +67,7 @@ def intersection_point(x1, y1, x2, y2):
     # define intersection point
     k = 0
     mu = 0
-    while k <= len(x2)-1:
+    while k < len(x2) - 1:
         for i in range(len(x1) - 1):
             line1 = [[x1[i], y1[i]], [x1[i + 1], y1[i + 1]]]
             line2 = [[x2[k], y2[k]], [x2[k + 1], y2[k + 1]]]
@@ -120,7 +120,7 @@ def build_relation_matrix(x, y, obj):
                 r[i, j] = np.amax(y[i])
             else:
                 r[i, j] = intersection_point(x[i], y[i], x[j], y[j])
-    print(r)
+    # print(r)
     return r
 
 

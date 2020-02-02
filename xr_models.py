@@ -1,11 +1,11 @@
-'''
+"""
 Discrete decision making:
 XR models Package - Build by bambirrarafael
-'''
+"""
 
 
 def check_non_strict_dominance(x1, y1, x2, y2, obj):
-    '''
+    """
     Function that differs two membership functions by its best values - if the first share points in the top of the
     trapezium with the second
     :param x1: x axis points of 1° membership function
@@ -14,7 +14,7 @@ def check_non_strict_dominance(x1, y1, x2, y2, obj):
     :param y2: y axis points of 2° membership function
     :param obj: string in {min, max} witch represents the objective of optimization
     :return: {True, False}
-    '''
+    """
     #
     # Imports
     import numpy as np
@@ -31,17 +31,17 @@ def check_non_strict_dominance(x1, y1, x2, y2, obj):
         top_of_function_2 = y2 == np.amax(y2)
         values = []
         for i in range(len(x1)):
-            if top_of_function_1[i] == True:
+            if top_of_function_1[i]:
                 values.append(x1[i])
         if obj == 'min':
             for i in range(len(x2)):
-                if top_of_function_2[i] == True:
+                if top_of_function_2[i]:
                     if x2[i] >= np.amin(values):
                         return True
             return False
         elif obj == 'max':
             for i in range(len(x2)):
-                if top_of_function_2[i] == True:
+                if top_of_function_2[i]:
                     if x2[i] <= np.amax(values):
                         return True
             return False
@@ -52,14 +52,14 @@ def check_non_strict_dominance(x1, y1, x2, y2, obj):
 
 
 def intersection_point(x1, y1, x2, y2):
-    '''
+    """
     Function that returns the intersection point between two membership functions
     :param x1: x axis points of 1° membership function
     :param y1: y axis points of 1° membership function
     :param x2: x axis points of 2° membership function
     :param y2: y axis points of 2° membership function
     :return: float that represents value of non-strict dominance
-    '''
+    """
     #
     # Imports
     import numpy as np
@@ -94,13 +94,13 @@ def intersection_point(x1, y1, x2, y2):
 
 
 def build_relation_matrix(x, y, obj):
-    '''
+    """
     Function that build non-strict preference relation matrix from membership functions
     :param x: array of lists where each list is a point in the x axis
     :param y: array of lists where each list is a point in the y axis
     :param obj: string in {min, max} witch represents the objective of optimization
     :return: numpy array that contains non-strict preference relation matrix
-    '''
+    """
     #
     # Imports
     import numpy as np
@@ -125,22 +125,23 @@ def build_relation_matrix(x, y, obj):
 
 
 def plot_membership_functions(x, y, names):
-    '''
+    """
     Function that plots membership functions
     :param x: array of lists where each list is a point in the x axis
     :param y: array of lists where each list is a point in the y axis
     :param names: list with the names of the functions
     :return: image
-    '''
+    """
     #
     # Imports
     import matplotlib.pyplot as plt
+    import numpy as np
     #
     # Check x and y lists
     if len(x) != len(y):
         print('Error - Missing data for membership functions')
     for i in range(len(x)):
-        if len(x[i]) != len((y[i])):
+        if len(x[i]) != len(y[i]):
             print('Error - Wrong declaration of membership function ' + str(i + 1))
     #
     # Build plot
@@ -151,11 +152,11 @@ def plot_membership_functions(x, y, names):
 
 
 def evaluate_on_xr_model(x):
-    '''
+    """
     Function of evaluate non-strict preference relation matrix in <X, R> model
-    :param x: ndarray square matrix of any size witch has the non-strict preference relation
+    :param x: nd-array square matrix of any size witch has the non-strict preference relation
     :return: non dominance score of alternatives
-    '''
+    """
     #
     # Import
     import numpy as np

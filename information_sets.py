@@ -1,103 +1,87 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import membership_functions as mf
+import xr_models as xr
 
 #
-# A. Information source Values
-temp = np.linspace(0, 40)
-F1 = []
-F2 = []
-F3 = []
-p = []
-
-def cold(x):
-    # Inputs
-    m = 0
-    n = 12
-    b = 20
-    if m <= x <= n:
-        return 1
-    elif n <= x <= b:
-        return (b - x) / (b - n)
-    elif x > b:
-        return 0
-
-def warm(x):
-    # Inputs
-    a = 17
-    m = 25
-    b = 28
-    if x <= a:
-        return 0
-    elif a <= x <= m:
-        return (x - a) / (m - a)
-    elif m <= x <= b:
-        return (b - x) / (b - m)
-    elif x >= b:
-        return 0
-
-def hot(x):
-    # Inputs
-    a = 25
-    m = 30
-    n = 40
-    if x < a:
-        return 0
-    elif a <= x <= m:
-        return (x - a) / (m - a)
-    elif m <= x <= n:
-        return 1
-
-def probability(x):
-    if 10 <= x < 15:
-        return 0.2
-    else:
-        return 0
-
-
-for i in range(len(temp)):
-    F1.append(cold(temp[i]))
-    F2.append(warm(temp[i]))
-    F3.append(hot(temp[i]))
-    p.append(probability(temp[i]))
-
-plt.plot(F1)
-plt.plot(F2)
-plt.plot(F3)
-plt.plot(p)
+# =================== Exemple 5.1 ==========================
+information = [100, 200, 300, 400, 500]
+membership_values = [0.333, 0.666, 1, 0.666, 0.333]
+plt.plot(information, membership_values, label='Exemple 5.1')
+plt.legend()
 plt.show()
-
-# ----------------------------------------------------------------------------------------------------------------------
 #
-# B. Entropy function
+# normalized information
+normalized_info = np.zeros(np.shape(information))
+for i in range(len(information)):
+    normalized_info[i] = (information[i] - np.amin(information))/(np.amax(information) - np.amin(information))
+print('normalized information: ' + str(normalized_info))
 #
-# Shannon
-Esh = 0
-p = np.array(p) + 0.00000000000001
-for i in range(len(p)):
-    Esh += p[i]*np.log(p[i])
-Esh = -Esh
+# information set
+info_set = np.zeros(np.shape(information))
+for i in range(len(information)):
+    info_set[i] = normalized_info[i]*membership_values[i]
+print('information set: ' + str(info_set))
 #
-# De Luca and Termini
-'''Elt_cold = 0
-Elt_warm = 0
-Elt_hot = 0
-F1 = np.array(F1) + 0.001
-F2 = np.array(F2) + 0.001
-F3 = np.array(F3) + 0.001
-for i in range(len(temp)):
-    Elt_cold += F1[i]*np.log(F1[i]) + (1 - F1[i])*np.log(1 - F1[i])
-    Elt_warm += F2[i] * np.log(F2[i]) + (1 - F2[i]) * np.log(1 - F2[i])
-    Elt_hot += F3[i] * np.log(F3[i]) + (1 - F3[i]) * np.log(1 - F3[i])
-Elt_cold = -(1/len(temp))*Elt_cold
-Elt_warm = -(1/len(temp))*Elt_warm
-Elt_hot = -(1/len(temp))*Elt_hot'''
+# normalized uncertainty information
+entropy_norm = 1/len(info_set)*np.sum(info_set)
+print('Entropy: ' + str(entropy_norm))
 #
-# Hanman-Anirban
-Eha = 0
-a = 0
-b = 0
-c = 1/0.3
-d = 1
-for i in range(len(temp)):
-    Eha = p[i]*np.exp(-(a * (p[i])**3 + b * (p[i])**2 + c * (p[i]) + d))
-
+# =================== Exemple 5.2 ==========================
+information = [[1000, 3000, 5000],
+               [1000, 3000, 5000, 7000, 10000],
+               [5000, 7000, 10000]]
+membership_values = [[1, 0.5, 0],
+                     [0, 0.5, 1, 0.5, 0],
+                     [0, 0.5, 1]]
+xr.plot_membership_functions(information, membership_values, names=['low', 'medium', 'high'])
+#
+# normalized information
+normalized_info = np.array([[0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0]])
+for i in range(len(information)):
+    for j in range(len(information[i])):
+        normalized_info[i][j] = (information[i][j] - np.amin(information[i]))/(np.amax(information[i]) -
+                                                                               np.amin(information[i]))
+print('normalized information: ' + '\n' + str(normalized_info))
+#
+# information set
+info_set = np.array([[0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0]])
+for i in range(len(information)):
+    for j in range(len(information[i])):
+        info_set[i][j] = normalized_info[i][j]*membership_values[i][j]
+print('information set: ' + '\n' + str(info_set))
+#
+# normalized uncertainty information
+entropy_norm = np.zeros(3)
+for i in range(3):
+    entropy_norm[i] = 1/len(info_set[i])*np.sum(info_set[i])
+print('Entropy: ' + '\n' + str(entropy_norm))
+#
+# =================== Exemple 5.3 ==========================
+information = [[2000, 3500, 5000, 6500],
+               [3500, 5000, 6500, 8000, 9500]]
+membership_values = [[1, 0.62, 0.4, 0.18],
+                     [0.2, 0.4, 0.6, 0.8, 1]]
+normalized_info = [[0, 0.33, 0.66, 1],
+                   [0, 0.25, 0.5, 0.75, 1]]
+# information set
+info_set = np.array([[0, 0, 0, 0], [0, 0, 0, 0, 0]])
+for i in range(len(information)):
+    for j in range(len(information[i])):
+        info_set[i][j] = normalized_info[i][j]*membership_values[i][j]
+print('information set: ' + '\n' + str(info_set))
+#
+# normalized uncertainty information
+entropy_norm = np.zeros(2)
+for i in range(2):
+    entropy_norm[i] = 1/len(info_set[i])*np.sum(info_set[i])
+print('Entropy: ' + '\n' + str(entropy_norm))
+#
+# Uncertainty measure
+uncertinty = np.zeros(2)
+for i in range(len(normalized_info)):
+    aux = 0
+    for j in range(len(normalized_info[i])):
+        aux += (normalized_info[i][j] + 0.001)*np.log(info_set[i][j]+0.001)
+    uncertinty[i] = -aux
+print('Uncertainty: ' + '\n' + str(uncertinty))

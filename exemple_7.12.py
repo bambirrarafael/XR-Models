@@ -1,4 +1,4 @@
-from xr_models import evaluate_on_xr_model as eval
+from xr_models import evaluate_on_xr_model as xr
 from xr_models import plot_membership_functions as plt
 from xr_models import build_relation_matrix as brm
 
@@ -10,4 +10,4 @@ membership_value = [[0, 1, 1, 0],
                     [0, 1, 1, 0],
                     [0, 1, 1, 0]]
 plt(x=cost, y=membership_value, names=altenative)
-eval(brm(cost, membership_value, 'min'))
+xr(brm(cost, membership_value, 'min'))
